@@ -1,0 +1,41 @@
+//Query 1
+db.unemployment.distinct("Year").length     //Counts the number of distinct years
+
+//Query 2
+db.unemployment.distinct("State").length     //Counts the number of distinct states
+
+//Query 3
+db.unemployment.find({Rate : {$lt: 1.0}}).count()        //This query calculates the number of records where the unemployement rate was less than 1%
+
+//Query 4
+db.unemployment.find({Rate : {$gt: 10}})       //Lists counties which had an unemployment rate higher than 10%
+
+//Query 5
+db.unemployment.aggregate([ { $group: { _id: null, avgRate: { $avg: "$Rate" } } } ])    //Calculates the average unemployment rate of every state
+
+//Query 6
+db.unemployment.find({Rate : {$lt: 8, $gt: 5}})          //Lists counties that had an unemployment rate between 5% and 8%
+
+//Query 7
+db.unemployment.aggregate([ { $group: { _id: "$State", max: { $max: "$Rate" } } }, { $sort: { max: -1 } }, { $limit: 1 } ])    //Identifies the state with the highest unemployment rate
+
+//Query 8
+db.unemployment.find({Rate : {$gt: 5}}).count()       //Counts counties with an unemployment rate higher than 5%
+
+//Query 9
+db.unemployment.aggregate([ { $group: { _id: { State: "$State", Year: "$Year" }, avg: { $avg: "$Rate" } } } ])   //List the unemployment rate in each state in each year
+
+//Query 10
+db.unemployment.aggregate([ { $group: { _id: "$State", sum: { $sum: "$Rate" } } } ])    //Calculates the sum of all county unemployment rates for each state
+
+//Query 11
+db.unemployment.aggregate([ { $match: { Year: { $gte: 2015 } } }, { $group: { _id: "$State", sum: { $sum: "$Rate" } } } ])    //Calculates the sum of all county unemployment rates from 2015 on for each state 
+
+
+
+
+
+
+
+
+
